@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Numerics;
-using System.Reflection;
+﻿using System.Drawing;
 
 namespace Figure_area
 {
-    public class PropertyFigure
+    public class PropertyFigure 
     {
         /// <summary>
         /// Проверяем тип фигуры. 
@@ -17,11 +14,18 @@ namespace Figure_area
             string typeFigure = "";
             switch (pointFigures.Length)
             {
+                case 1:
+                    typeFigure = "Точка";
+                    break;
+                case 2:
+                    typeFigure = "Отрезок";
+                    break;
                 case 3:
                     typeFigure = "Треугольник";
                     break;
                 case 4:
-                    typeFigure = LengthAllIs(pointFigures) ? "Квадрат" : "Прямоугольник";
+                    typeFigure = ListAngles(pointFigures).All(x => x == ListAngles(pointFigures).FirstOrDefault()) ?
+                        LengthAllIs(pointFigures) ? "Квадрат" : "Прямоугольник" : "Многоугольник";
                     break;
                 case > 5:
                     typeFigure = "Многоугольник";
@@ -29,7 +33,6 @@ namespace Figure_area
             }
             return typeFigure;
         }
-
 
         /// <summary>
         /// Вычисляем площадь многоугольна. 
@@ -46,6 +49,7 @@ namespace Figure_area
 
                 area += a.X * b.Y - a.Y * b.X;
             }
+
             return Math.Abs(area) / 2;
         }
 
@@ -78,8 +82,8 @@ namespace Figure_area
         internal double LineLength(Point pointA, Point pointB)
         {
             double lineListLength = Math.Sqrt(
-                    Math.Pow(pointA.X - pointB.X, 2) +
-                    Math.Pow(pointA.Y - pointB.Y, 2));
+                Math.Pow(pointA.X - pointB.X, 2) +
+                Math.Pow(pointA.Y - pointB.Y, 2));
             return lineListLength;
         }
 
@@ -94,7 +98,7 @@ namespace Figure_area
         {
             if (LineTrue(pointFigures))
             {
-               return ListLengthAll(pointFigures).All(x => x == ListLengthAll(pointFigures).FirstOrDefault());
+                return ListLengthAll(pointFigures).All(x => x == ListLengthAll(pointFigures).FirstOrDefault());
             }
             else
                 return false;
@@ -108,20 +112,57 @@ namespace Figure_area
         internal List<double> ListLengthAll(Point[] pointFigures)
         {
             List<double> arr = new List<double>();
-            for (int i = 0; i < pointFigures.Length; i++)
+            if (LineTrue(pointFigures))
             {
-                int j = (i + 1) % pointFigures.Length;
-                Point a = pointFigures[i], b = pointFigures[j];
-                double getSid = LineLength(a, b);
-                arr.Add(getSid);
+                for (int i = 0; i < pointFigures.Length; i++)
+                {
+                    int j = (i + 1) % pointFigures.Length;
+                    Point a = pointFigures[i], b = pointFigures[j];
+                    double getSid = LineLength(a, b);
+                    arr.Add(getSid);
+                }
             }
             return arr;
         }
 
         /// <summary>
-        /// Определяем радиус круга по двум точкам.
+        /// Список всех углов
         /// </summary>
         /// <param name="pointFigures"></param>
+        public List<double> ListAngles(Point[] pointFigures)
+        {
+            List<double> line = new List<double>();
+            if (LineTrue(pointFigures, 3))
+            {
+                for (int i = 0; i < pointFigures.Length; i++)
+                {
+                    int j = (i + 1) % pointFigures.Length;
+                    int e = (i + 2) % pointFigures.Length;
+                    Point a = pointFigures[i], b = pointFigures[j], c = pointFigures[e];
+                    line.Add(Angle(a, b, c) / Math.PI * 180);
+                }
+            }
+            return line;
+        }
+
+        /// <summary>
+        /// Угол по трем точкам
+        /// </summary>m>
+        private static double Angle(Point a, Point b, Point c)
+        {
+            double x1 = a.X - b.X, x2 = c.X - b.X;
+            double y1 = a.Y - b.Y, y2 = c.Y - b.Y;
+
+            double d1 = Math.Sqrt(x1 * x1 + y1 * y1);
+            double d2 = Math.Sqrt(x2 * x2 + y2 * y2);
+            return Math.Acos((x1 * x2 + y1 * y2) / (d1 * d2));
+        }
+
+        /// <summary>
+        /// Определяем радиус круга по 2-ум точкам,
+        /// из массива точек, берем первые две.
+        /// </summary>
+        /// <param name="pointFigures">количество точек >= 3</param>
         /// <returns>bool</returns>
         internal double RadiusCircel(Point[] pointFigures)
         {
@@ -147,60 +188,43 @@ namespace Figure_area
         internal static double RadiusCircel(double sizeLine)
         {
             sizeLine = sizeLine * sizeLine * Math.PI;
-                return Math.Round(sizeLine, 2);
+            return Math.Round(sizeLine, 2);
         }
 
+
         /// <summary>
-        /// Определим является ли треугольник прямоугольным
+        ///  Проверка, пересечений линий, true если линии пересекаются
         /// </summary>
         /// <param name="pointFigures"></param>
         /// <returns>bool</returns>
-        public List<double> ListAngles(Point[] pointFigures)
+        internal bool CrossingLines(Point[] pointFigures)
         {
-            List<double> line = ListLengthAll(pointFigures);
-            for (int i = 0; i < line.Count; i++)
+            if (LineTrue(pointFigures, 4))
             {
-                int j = (i + 1) % line.Count;
-                Point a = pointFigures[i], b = pointFigures[j];
+                for (int i = 0; i < pointFigures.Length; i++)
+                {
+                    int j = (i + 1) % pointFigures.Length;
+                    int k = (i + 2) % pointFigures.Length;
+                    int z = (i + 3) % pointFigures.Length;
+                    Point a = pointFigures[i],
+                        b = pointFigures[j],
+                        c = pointFigures[k],
+                        d = pointFigures[z];
 
+                    double common = (b.X - a.X) * (d.Y - c.Y) - (b.Y - a.Y) * (d.X - c.X);
+
+                    double rH = (a.Y - c.Y) * (d.X - c.X) - (a.X - c.X) * (d.Y - c.Y);
+                    double sH = (a.Y - c.Y) * (b.X - a.X) - (a.X - c.X) * (b.Y - a.Y);
+
+                    double r = rH / common;
+                    double s = sH / common;
+
+                    if (r is >= 0 and <= 1 && s is >= 0 and <= 1)
+                        return true;
+                }
             }
-            return arr;
+
+            return false;
         }
-
-
-
-        ///// <summary>
-        /////  Проверка, пересечений линий, true если линии пересекаются
-        ///// </summary>
-        ///// <param name="pointFigures"></param>
-        ///// <returns>bool</returns>
-        //internal bool CrossingLines(Point[] pointFigures)
-        //{
-        //    if (LineTrue(pointFigures, 4))
-        //    {
-        //        for (int i = 0; i < pointFigures.Length; i++)
-        //        {
-        //            int j = (i + 1) % pointFigures.Length;
-        //            int k = (i + 2) % pointFigures.Length;
-        //            int z = (i + 3) % pointFigures.Length;
-        //            Point a = pointFigures[i],
-        //                b = pointFigures[j],
-        //                c = pointFigures[k],
-        //                d = pointFigures[z];
-
-        //            double common = (b.X - a.X) * (d.Y - c.Y) - (b.Y - a.Y) * (d.X - c.X);
-
-        //            double rH = (a.Y - c.Y) * (d.X - c.X) - (a.X - c.X) * (d.Y - c.Y);
-        //            double sH = (a.Y - c.Y) * (b.X - a.X) - (a.X - c.X) * (b.Y - a.Y);
-
-        //            double r = rH / common;
-        //            double s = sH / common;
-
-        //            if (r is >= 0 and <= 1 && s is >= 0 and <= 1)
-        //                return true;
-        //        }
-        //    }
-        //    return false;
-        //}
     }
 }

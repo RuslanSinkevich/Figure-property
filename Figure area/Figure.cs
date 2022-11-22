@@ -5,13 +5,23 @@ namespace Figure_area
     public abstract class Figure : PropertyFigure
     {
         public abstract string NameFigure { get; set; }
+
+        public abstract string TypeFigure(Point[] pointFigure);
+
         public abstract double AreaFigure(Point[] pointFigure);
 
     }
 
     public class Circel : Figure
     {
+
         public override string NameFigure { get; set; } = "Круг";
+
+        public override string TypeFigure(Point[] pointFigure)
+        {
+            bool lineTrue = LineTrue(pointFigure);
+            return lineTrue ? GetTypeFigure(pointFigure) : "тип неизвестен";
+        }
 
         //площадь
         public override double AreaFigure(Point[] pointFigure)
@@ -30,6 +40,11 @@ namespace Figure_area
     public class Triangle : Figure
     {
         public override string NameFigure { get; set; } = "Треугольник";
+        public override string TypeFigure(Point[] pointFigure)
+        {
+            bool lineTrue = LineTrue(pointFigure);
+            return lineTrue ? GetTypeFigure(pointFigure) : "тип неизвестен";
+        }
 
         //площадь
         public override double AreaFigure(Point[] pointFigure)
@@ -46,11 +61,30 @@ namespace Figure_area
             return lineLenghtAll;
         }
 
-        public List<double> Rectangular(Point[] pointFigure)
+        /// <summary>
+        /// Определяем является ли треугольник прямоугольным
+        /// </summary> 
+        public bool Rectangular(Point[] pointFigure)
         {
             // Определим что количество точек позволит построить треугольник
             bool lineTrue = LineTrue(pointFigure, 3);
-            return ArrAngles(pointFigure);
+            return lineTrue && ListAngles(pointFigure).Contains(90);
+        }
+    }
+
+    public class UnidentifiedFigure : Figure
+    {
+        public override string TypeFigure(Point[] pointFigure)
+        {
+            return  GetTypeFigure(pointFigure);
+        }
+
+        public override string NameFigure { get; set; } = "Неизвестная фигура";
+
+        public override double AreaFigure(Point[] pointFigure)
+        {
+            bool lineTrue = LineTrue(pointFigure, 3);
+            return lineTrue ? AreaByPoints(pointFigure) : 0;
         }
     }
 }
