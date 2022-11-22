@@ -26,14 +26,19 @@ namespace Figure_area
         //площадь
         public override double AreaFigure(Point[] pointFigure)
         {
+            LineTrue(pointFigure);
             return RadiusCircel(SizeLine(pointFigure));
         }
 
         // Длина отрезка (радиуса)
         public double SizeLine(Point[] pointFigure)
         {
-            double sizeLine = LineLength(pointFigure[0], pointFigure[1]);
-            return sizeLine;
+            if (LineTrue(pointFigure))
+            {
+                double sizeLine = LineLength(pointFigure[0], pointFigure[1]);
+                return sizeLine;
+            }
+            return 0;
         }
     }
 

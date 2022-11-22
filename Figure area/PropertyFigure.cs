@@ -27,7 +27,7 @@ namespace Figure_area
                     typeFigure = ListAngles(pointFigures).All(x => x == ListAngles(pointFigures).FirstOrDefault()) ?
                         LengthAllIs(pointFigures) ? "Квадрат" : "Прямоугольник" : "Многоугольник";
                     break;
-                case > 5:
+                case >= 5:
                     typeFigure = "Многоугольник";
                     break;
             }
@@ -39,7 +39,7 @@ namespace Figure_area
         /// </summary>
         /// <param name="pointFigures">Массив точек</param>
         /// <returns>bool</returns>
-        internal double AreaByPoints(Point[] pointFigures)
+        protected double AreaByPoints(Point[] pointFigures)
         {
             double area = 0;
             for (int i = 0; i < pointFigures.Length; i++)
@@ -58,7 +58,7 @@ namespace Figure_area
         /// </summary>
         /// <param name="pointFigures">Массив точек</param>
         /// <returns>bool</returns>
-        internal bool LineTrue(Point[] pointFigures)
+        protected bool LineTrue(Point[] pointFigures)
         {
             return pointFigures.Length > 1;
         }
