@@ -6,6 +6,8 @@ namespace Figure_Tests
     [TestFixture]
     public class PropertyFigureTests : PropertyFigure
     {
+        private readonly PropertyFigure propertyFigure = new PropertyFigure();
+
         public Point[] PointPoint, PointSegment, PointTriangle, PointSquare, 
             PointRectangle, PointPolygon, PointPolygon5;
         
@@ -49,14 +51,28 @@ namespace Figure_Tests
         }
 
         [Test]
-        public void LineTrue_return_more_1()
+        public void if_Line_return_true()
         {
             Assert.That(LineTrue(PointPoint), Is.EqualTo(false));
             Assert.That(LineTrue(PointSegment), Is.EqualTo(true));
         }
 
-        
+        [Test]
+        public void Length_All_Is_return_true()
+        {
+            Assert.That(LengthAllIs(PointSquare), Is.EqualTo(true));
+            Assert.That(LengthAllIs(PointRectangle), Is.EqualTo(false));
+        }
 
+        [Test]
+        public void List_length_all_angles_equals()
+        {
+            List<double> listAngSquare = ListLengthAll(PointSquare);
+            Assert.That(listAngSquare.All(x => x == listAngSquare.FirstOrDefault()), Is.EqualTo(true));
+            List<double> listAngPointTriangle = ListLengthAll(PointTriangle);
+            Assert.That(listAngPointTriangle.All(x => x == listAngPointTriangle.FirstOrDefault()), Is.EqualTo(false));
+
+        }
 
 
         //[Test]_

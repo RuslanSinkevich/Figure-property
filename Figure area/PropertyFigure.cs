@@ -94,7 +94,7 @@ namespace Figure_area
         /// </summary>
         /// <param name="pointFigures"></param>
         /// <returns>bool</returns>
-        internal bool LengthAllIs(Point[] pointFigures)
+        protected bool LengthAllIs(Point[] pointFigures)
         {
             if (LineTrue(pointFigures))
             {
@@ -109,7 +109,7 @@ namespace Figure_area
         /// </summary>
         /// <param name="pointFigures"></param>
         /// <returns>bool</returns>
-        internal List<double> ListLengthAll(Point[] pointFigures)
+        protected List<double> ListLengthAll(Point[] pointFigures)
         {
             List<double> arr = new List<double>();
             if (LineTrue(pointFigures))
@@ -129,7 +129,7 @@ namespace Figure_area
         /// Список всех углов
         /// </summary>
         /// <param name="pointFigures"></param>
-        public List<double> ListAngles(Point[] pointFigures)
+        protected List<double> ListAngles(Point[] pointFigures)
         {
             List<double> line = new List<double>();
             if (LineTrue(pointFigures, 3))
@@ -164,7 +164,7 @@ namespace Figure_area
         /// </summary>
         /// <param name="pointFigures">количество точек >= 3</param>
         /// <returns>bool</returns>
-        internal double RadiusCircel(Point[] pointFigures)
+        protected double RadiusCircel(Point[] pointFigures)
         {
             if (LineTrue(pointFigures))
             {
@@ -185,7 +185,7 @@ namespace Figure_area
         /// </summary>
         /// <param name="sizeLine"></param>
         /// <returns>bool</returns>
-        internal static double RadiusCircel(double sizeLine)
+        protected static double RadiusCircel(double sizeLine)
         {
             sizeLine = sizeLine * sizeLine * Math.PI;
             return Math.Round(sizeLine, 2);
@@ -197,7 +197,7 @@ namespace Figure_area
         /// </summary>
         /// <param name="pointFigures"></param>
         /// <returns>bool</returns>
-        internal bool CrossingLines(Point[] pointFigures)
+        protected bool CrossingLines(Point[] pointFigures)
         {
             if (LineTrue(pointFigures, 4))
             {
