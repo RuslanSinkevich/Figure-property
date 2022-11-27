@@ -8,7 +8,6 @@ namespace Figure_area
         /// Проверяем тип фигуры. 
         /// </summary>
         /// <param name="pointFigures"></param>
-        /// <returns>bool</returns>
         public string GetTypeFigure(Point[] pointFigures)
         {
             string typeFigure = "";
@@ -24,7 +23,7 @@ namespace Figure_area
                     typeFigure = "Треугольник";
                     break;
                 case 4:
-                    typeFigure = ListAngles(pointFigures).All(x => x == ListAngles(pointFigures).FirstOrDefault()) ?
+                    typeFigure = ListAngles(pointFigures).All(x => Math.Abs(x - ListAngles(pointFigures).FirstOrDefault()) < 0.01) ?
                         LengthAllIs(pointFigures) ? "Квадрат" : "Прямоугольник" : "Многоугольник";
                     break;
                 case >= 5:
@@ -38,7 +37,6 @@ namespace Figure_area
         /// Вычисляем площадь многоугольна. 
         /// </summary>
         /// <param name="pointFigures">Массив точек</param>
-        /// <returns>bool</returns>
         protected double AreaByPoints(Point[] pointFigures)
         {
             double area = 0;
@@ -57,7 +55,6 @@ namespace Figure_area
         /// Проверка, количество точек должно быть больше 1. 
         /// </summary>
         /// <param name="pointFigures">Массив точек</param>
-        /// <returns>bool</returns>
         protected bool LineTrue(Point[] pointFigures)
         {
             return pointFigures.Length > 1;
@@ -68,7 +65,6 @@ namespace Figure_area
         /// </summary>
         /// <param name="pointFigures">Массив точек</param>
         /// <param name="countPoint">Количество точек</param>
-        /// <returns>bool</returns>
         internal bool LineTrue(Point[] pointFigures, int countPoint)
         {
             return pointFigures.Length > --countPoint;
@@ -93,12 +89,11 @@ namespace Figure_area
         ///     последняя итерация проверяет первую и последнюю точку в массиве.
         /// </summary>
         /// <param name="pointFigures"></param>
-        /// <returns>bool</returns>
         protected bool LengthAllIs(Point[] pointFigures)
         {
             if (LineTrue(pointFigures))
             {
-                return ListLengthAll(pointFigures).All(x => x == ListLengthAll(pointFigures).FirstOrDefault());
+                return ListLengthAll(pointFigures).All(x => Math.Abs(x - ListLengthAll(pointFigures).FirstOrDefault()) < 0.01);
             }
             else
                 return false;
@@ -108,7 +103,6 @@ namespace Figure_area
         /// Список длин всех отрезков
         /// </summary>
         /// <param name="pointFigures"></param>
-        /// <returns>bool</returns>
         protected List<double> ListLengthAll(Point[] pointFigures)
         {
             List<double> arr = new List<double>();
@@ -163,16 +157,14 @@ namespace Figure_area
         /// из массива точек, берем первые две.
         /// </summary>
         /// <param name="pointFigures">количество точек >= 3</param>
-        /// <returns>bool</returns>
-        protected double RadiusCircel(Point[] pointFigures)
+        protected double RadiusCircle(Point[] pointFigures)
         {
             if (LineTrue(pointFigures))
             {
                 Point pointA = pointFigures[0];
                 Point pointB = pointFigures[1];
-                double lineLength = LineLength(pointA, pointB);
-                lineLength = lineLength * lineLength * Math.PI;
-                return lineLength;
+                double sizeLine = LineLength(pointA, pointB);
+                return RadiusCircleLine(sizeLine);
             }
             else
             {
@@ -184,19 +176,27 @@ namespace Figure_area
         /// Определяем радиус круга по длине 
         /// </summary>
         /// <param name="sizeLine"></param>
-        /// <returns>bool</returns>
-        protected static double RadiusCircel(double sizeLine)
+        protected static double RadiusCircle(double sizeLine)
+        {
+           return RadiusCircleLine(sizeLine);
+        }
+
+
+        /// <summary>
+        /// Вычисляем площадь круга по длине отрезка.
+        /// </summary>
+        /// <param name="sizeLine"></param>
+        private static double RadiusCircleLine(double sizeLine)
         {
             sizeLine = sizeLine * sizeLine * Math.PI;
             return Math.Round(sizeLine, 2);
         }
 
-
+        
         /// <summary>
         ///  Проверка, пересечений линий, true если линии пересекаются
         /// </summary>
         /// <param name="pointFigures"></param>
-        /// <returns>bool</returns>
         protected bool CrossingLines(Point[] pointFigures)
         {
             if (LineTrue(pointFigures, 4))

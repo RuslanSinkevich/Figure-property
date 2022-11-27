@@ -1,15 +1,13 @@
 ﻿using System.Drawing;
 using Figure_area;
 
-namespace Figure_Tests
+namespace Figure.Tests
 {
     [TestFixture]
     public class PropertyFigureTests : PropertyFigure
     {
-        private readonly PropertyFigure propertyFigure = new PropertyFigure();
-
         public Point[] PointPoint, PointSegment, PointTriangle, PointSquare, 
-            PointRectangle, PointPolygon, PointPolygon5;
+            PointRectangle, PointPolygon, PointPolygon5, Radius, PointCrossing;
         
 
         public PropertyFigureTests()
@@ -29,7 +27,8 @@ namespace Figure_Tests
             PointRectangle = new[] { point1, point2, point6, point7 };
             PointPolygon = new[] { point1, point2, point6, point8 };
             PointPolygon5 = new[] { point1, point2, point6, point8, point9 };
-
+            Radius = new[] { point1, point6 };
+            PointCrossing = new[] { point1, point2, point3, point4, point2 };
         }
 
         [Test]
@@ -44,36 +43,65 @@ namespace Figure_Tests
         }
 
         [Test]
-        public void AreaByPoints_return_Area()
+        public void Area_By_Points_return_Area()
         {
-            Assert.That(AreaByPoints(PointRectangle), Is.EqualTo(8.0));
-            Assert.That(AreaByPoints(PointPolygon5), Is.EqualTo(11.50));
+            Assert.That(AreaByPoints(PointRectangle), Is.EqualTo(8.0).Within(1).Percent);
+            Assert.That(AreaByPoints(PointPolygon5), Is.EqualTo(11.50).Within(1).Percent);
         }
 
         [Test]
-        public void if_Line_return_true()
+        public void If_line_return_true()
         {
             Assert.That(LineTrue(PointPoint), Is.EqualTo(false));
             Assert.That(LineTrue(PointSegment), Is.EqualTo(true));
         }
 
         [Test]
-        public void Length_All_Is_return_true()
+        public void Length_all_line_equals_return_true()
         {
             Assert.That(LengthAllIs(PointSquare), Is.EqualTo(true));
             Assert.That(LengthAllIs(PointRectangle), Is.EqualTo(false));
         }
 
         [Test]
-        public void List_length_all_angles_equals()
+        public void List_length_all_sides_equals()
         {
             List<double> listAngSquare = ListLengthAll(PointSquare);
-            Assert.That(listAngSquare.All(x => x == listAngSquare.FirstOrDefault()), Is.EqualTo(true));
+            Assert.That(listAngSquare.All(x => Math.Abs(x - listAngSquare.FirstOrDefault()) < 0.01),
+                Is.EqualTo(true));
             List<double> listAngPointTriangle = ListLengthAll(PointTriangle);
-            Assert.That(listAngPointTriangle.All(x => x == listAngPointTriangle.FirstOrDefault()), Is.EqualTo(false));
+            Assert.That(listAngPointTriangle.All(x => Math.Abs(x - listAngPointTriangle.FirstOrDefault()) < 0.01), 
+                Is.EqualTo(false));
 
         }
 
+        [Test]
+        public void List_all_angles_equals()
+        {
+            List<double> pointSquare = ListAngles(PointSquare);
+            Assert.That(pointSquare.All(x => Math.Abs(x - pointSquare.FirstOrDefault()) < 0.01), 
+                Is.EqualTo(true));
+            List<double> pointRectangle = ListAngles(PointRectangle);
+            Assert.That(pointRectangle.All(x => Math.Abs(x - pointRectangle.FirstOrDefault()) < 0.01),
+                Is.EqualTo(true));
+            List<double> pointPolygon5 = ListAngles(PointPolygon5);
+            Assert.That(pointPolygon5.All(x => Math.Abs(x - pointPolygon5.FirstOrDefault()) < 0.01), 
+                Is.EqualTo(false));
+        }
+
+        [Test]
+        public void Radius_circle_return_area_circle()
+        {
+            Assert.That(RadiusCircle(PointSegment), Is.EqualTo(12.56).Within(1).Percent);
+            Assert.That(RadiusCircle(Radius), Is.EqualTo(62.77).Within(1).Percent);
+        }
+
+        [Test]
+        public void Crossing_Lines_return_true()
+        {
+            Assert.That(CrossingLines(PointPolygon5), Is.EqualTo(false));
+            Assert.That(CrossingLines(PointCrossing), Is.EqualTo(true));
+        }
 
         //[Test]_
         //public void GetTypeFigure_InvalidFormat_FormatException()

@@ -12,7 +12,7 @@ namespace Figure_area
 
     }
 
-    public class Circel : Figure
+    public class Circle : Figure
     {
 
         public override string NameFigure { get; set; } = "Круг";
@@ -27,7 +27,7 @@ namespace Figure_area
         public override double AreaFigure(Point[] pointFigure)
         {
             LineTrue(pointFigure);
-            return RadiusCircel(SizeLine(pointFigure));
+            return RadiusCircle(SizeLine(pointFigure));
         }
 
         // Длина отрезка (радиуса)
