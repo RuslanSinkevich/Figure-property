@@ -2,11 +2,11 @@
 
 namespace Figure_area
 {
-    public abstract class Figure : PropertyFigure
+    public abstract class Figure: PropertyFigure
     {
         public abstract Point[] Points { get; set; }
 
-        public abstract string NameFigure { get; set; }
+        public abstract string? NameFigure { get; set; }
 
         public abstract double AreaFigure();
     }
@@ -15,7 +15,7 @@ namespace Figure_area
     {
         public sealed override Point[] Points { get; set; }
         
-        public sealed override string NameFigure { get; set; }
+        public sealed override string? NameFigure { get; set; }
 
         public Circle(Point[] points)
         {
@@ -56,7 +56,7 @@ namespace Figure_area
 
         public sealed override Point[] Points { get; set; }
 
-        public sealed override string NameFigure { get; set; }
+        public sealed override string? NameFigure { get; set; }
 
         /// <summary>
         /// Площадь фигуры
@@ -88,27 +88,31 @@ namespace Figure_area
         }
     }
 
-    public class UnidentifiedFigure<T> : Figure
+    public class UnidentifiedFigure
     {
-        public sealed override Point[] Points { get; set; }
-        public sealed override string NameFigure { get; set; }
+        Figure figure = null;
 
         public UnidentifiedFigure(Point[] points)
         {
             Points = points;
-            NameFigure = GetTypeFigure(points);
+            Sw();
         }
 
-        public string TypeFigure()
+        private Figure Sw()
         {
-            return GetTypeFigure(Points);
+            switch (Points.Length)
+            {
+                case 3: figure = new Circle(Points); break;
+
+
+            }
+            return  figure;
+            
         }
 
-        public override double AreaFigure()
-        {
-            bool lineTrue = LineTrue(Points, 3);
-            return lineTrue ? AreaByPoints(Points) : 0;
-        }
+        public Point[] Points { get; set; }
+
     }
+
 }
 
