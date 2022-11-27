@@ -4,38 +4,42 @@ namespace Figure_area
 {
     public abstract class Figure : PropertyFigure
     {
+        public abstract Point[] Points { get; set; }
+
         public abstract string NameFigure { get; set; }
 
-        public abstract string TypeFigure(Point[] pointFigure);
-
-        public abstract double AreaFigure(Point[] pointFigure);
-
+        public abstract double AreaFigure();
     }
 
     public class Circle : Figure
     {
+        public sealed override Point[] Points { get; set; }
+        
+        public sealed override string NameFigure { get; set; }
 
-        public override string NameFigure { get; set; } = "Круг";
-
-        public override string TypeFigure(Point[] pointFigure)
+        public Circle(Point[] points)
         {
-            bool lineTrue = LineTrue(pointFigure);
-            return lineTrue ? GetTypeFigure(pointFigure) : "тип неизвестен";
+            Points = points;
+            NameFigure = "Круг";
         }
 
-        //площадь
-        public override double AreaFigure(Point[] pointFigure)
+        /// <summary>
+        /// Площадь фигуры
+        /// </summary> 
+        public override double AreaFigure()
         {
-            LineTrue(pointFigure);
-            return RadiusCircle(SizeLine(pointFigure));
+            LineTrue(Points);
+            return RadiusCircle(SizeLine());
         }
 
-        // Длина отрезка (радиуса)
-        public double SizeLine(Point[] pointFigure)
+        /// <summary>
+        /// Длина отрезка (радиуса)
+        /// </summary> 
+        public double SizeLine()
         {
-            if (LineTrue(pointFigure))
+            if (LineTrue(Points))
             {
-                double sizeLine = LineLength(pointFigure[0], pointFigure[1]);
+                double sizeLine = LineLength(Points[0], Points[1]);
                 return sizeLine;
             }
             return 0;
@@ -44,52 +48,66 @@ namespace Figure_area
 
     public class Triangle : Figure
     {
-        public override string NameFigure { get; set; } = "Треугольник";
-        public override string TypeFigure(Point[] pointFigure)
+        public Triangle(Point[] points)
         {
-            bool lineTrue = LineTrue(pointFigure);
-            return lineTrue ? GetTypeFigure(pointFigure) : "тип неизвестен";
+            Points = points;
+            NameFigure = "Треугольник";
         }
 
-        //площадь
-        public override double AreaFigure(Point[] pointFigure)
+        public sealed override Point[] Points { get; set; }
+
+        public sealed override string NameFigure { get; set; }
+
+        /// <summary>
+        /// Площадь фигуры
+        /// </summary> 
+        public override double AreaFigure()
         {
             // Определим что количество точек позволит построить треугольник
-            bool lineTrue = LineTrue(pointFigure, 3);
-            return lineTrue ? AreaByPoints(pointFigure) : 0;
+            bool lineTrue = LineTrue(Points, 3);
+            return lineTrue ? AreaByPoints(Points) : 0;
         }
 
-        // Проверка, равносторонний
-        public bool LineLenghtAll(Point[] pointFigure)
+        /// <summary>
+        /// Определяем все стороны равны (равносторонний)
+        /// </summary> 
+        public bool LineLengthAll()
         {
-            bool lineLenghtAll = LengthAllIs(pointFigure);
-            return lineLenghtAll;
+            bool lineLengthAll = LengthAllIs(Points);
+            return lineLengthAll;
         }
 
         /// <summary>
         /// Определяем является ли треугольник прямоугольным
         /// </summary> 
-        public bool Rectangular(Point[] pointFigure)
+        public bool Rectangular()
         {
             // Определим что количество точек позволит построить треугольник
-            bool lineTrue = LineTrue(pointFigure, 3);
-            return lineTrue && ListAngles(pointFigure).Contains(90);
+            bool lineTrue = LineTrue(Points, 3);
+            return lineTrue && ListAngles(Points).Contains(90);
         }
     }
 
-    public class UnidentifiedFigure : Figure
+    public class UnidentifiedFigure<T> : Figure
     {
-        public override string TypeFigure(Point[] pointFigure)
+        public sealed override Point[] Points { get; set; }
+        public sealed override string NameFigure { get; set; }
+
+        public UnidentifiedFigure(Point[] points)
         {
-            return  GetTypeFigure(pointFigure);
+            Points = points;
+            NameFigure = GetTypeFigure(points);
         }
 
-        public override string NameFigure { get; set; } = "Неизвестная фигура";
-
-        public override double AreaFigure(Point[] pointFigure)
+        public string TypeFigure()
         {
-            bool lineTrue = LineTrue(pointFigure, 3);
-            return lineTrue ? AreaByPoints(pointFigure) : 0;
+            return GetTypeFigure(Points);
+        }
+
+        public override double AreaFigure()
+        {
+            bool lineTrue = LineTrue(Points, 3);
+            return lineTrue ? AreaByPoints(Points) : 0;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Figure_area
                     break;
                 case 4:
                     typeFigure = ListAngles(pointFigures).All(x => Math.Abs(x - ListAngles(pointFigures).FirstOrDefault()) < 0.01) ?
-                        LengthAllIs(pointFigures) ? "Квадрат" : "Прямоугольник" : "Многоугольник";
+                        LengthAllIs(pointFigures) ? "Квадрат" : "Прямоугольник" : "Четырехугольник";
                     break;
                 case >= 5:
                     typeFigure = "Многоугольник";

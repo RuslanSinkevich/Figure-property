@@ -32,18 +32,18 @@ namespace Figure.Tests
         }
 
         [Test]
-        public void GetTypeFigure_Return_TypeFigure()
+        public void Point_arr_return_type_figure()
         {
             Assert.That(GetTypeFigure(PointSegment), Is.EqualTo("Отрезок"));
             Assert.That(GetTypeFigure(PointTriangle), Is.EqualTo("Треугольник"));
             Assert.That(GetTypeFigure(PointSquare), Is.EqualTo("Квадрат"));
             Assert.That(GetTypeFigure(PointRectangle), Is.EqualTo("Прямоугольник"));
-            Assert.That(GetTypeFigure(PointPolygon), Is.EqualTo("Многоугольник"));
+            Assert.That(GetTypeFigure(PointPolygon), Is.EqualTo("Четырехугольник"));
             Assert.That(GetTypeFigure(PointPolygon5), Is.EqualTo("Многоугольник"));
         }
 
         [Test]
-        public void Area_By_Points_return_Area()
+        public void Area_by_points_return_Area()
         {
             Assert.That(AreaByPoints(PointRectangle), Is.EqualTo(8.0).Within(1).Percent);
             Assert.That(AreaByPoints(PointPolygon5), Is.EqualTo(11.50).Within(1).Percent);
@@ -64,7 +64,7 @@ namespace Figure.Tests
         }
 
         [Test]
-        public void List_length_all_sides_equals()
+        public void List_length_all_sides_equals_return_true()
         {
             List<double> listAngSquare = ListLengthAll(PointSquare);
             Assert.That(listAngSquare.All(x => Math.Abs(x - listAngSquare.FirstOrDefault()) < 0.01),
@@ -76,7 +76,7 @@ namespace Figure.Tests
         }
 
         [Test]
-        public void List_all_angles_equals()
+        public void List_all_angles_equals_return_true()
         {
             List<double> pointSquare = ListAngles(PointSquare);
             Assert.That(pointSquare.All(x => Math.Abs(x - pointSquare.FirstOrDefault()) < 0.01), 
