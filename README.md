@@ -8,7 +8,7 @@ PropertyFigure - методы свойств фигур
 
 ## Использование
 ### Доступные классы и методы
-```
+```c#
 Point point1 = new Point(1, 1);
 Point point2 = new Point(1, 3);
 Point point3 = new Point(3, 3);
