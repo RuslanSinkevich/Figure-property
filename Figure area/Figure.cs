@@ -90,23 +90,26 @@ namespace Figure_area
 
     public class UnidentifiedFigure
     {
-        Figure figure = null;
+        private Figure? _figure;
 
         public UnidentifiedFigure(Point[] points)
         {
             Points = points;
-            Sw();
+            FindFigure();
         }
 
-        private Figure Sw()
+        public Figure? FindFigure()
         {
             switch (Points.Length)
             {
-                case 3: figure = new Circle(Points); break;
-
-
-            }
-            return  figure;
+                case 2: 
+                    _figure = new Circle(Points);
+                    break;
+                case 3:
+                    _figure = new Triangle(Points);
+                    break;
+                }
+            return  _figure;
             
         }
 
